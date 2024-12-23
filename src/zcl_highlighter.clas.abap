@@ -187,19 +187,24 @@ CLASS zcl_highlighter IMPLEMENTATION.
 
     FIELD-SYMBOLS <ls_match> TYPE ty_match.
 
-    LOOP AT it_matches ASSIGNING <ls_match>.
-      lv_chunk = substring( val = iv_line
-                            off = <ls_match>-offset
-                            len = <ls_match>-length ).
+    TRY.
+        LOOP AT it_matches ASSIGNING <ls_match>.
+          lv_chunk = substring( val = iv_line
+                                off = <ls_match>-offset
+                                len = <ls_match>-length ).
 
-      CLEAR ls_rule. " Failed read equals no style
-      READ TABLE mt_rules INTO ls_rule WITH KEY token = <ls_match>-token.
+          CLEAR ls_rule. " Failed read equals no style
+          READ TABLE mt_rules INTO ls_rule WITH KEY token = <ls_match>-token.
 
-      lv_chunk = apply_style( iv_line  = lv_chunk
-                              iv_class = ls_rule-style ).
+          lv_chunk = apply_style( iv_line  = lv_chunk
+                                  iv_class = ls_rule-style ).
 
-      rv_line = rv_line && lv_chunk.
-    ENDLOOP.
+          rv_line = rv_line && lv_chunk.
+        ENDLOOP.
+      CATCH cx_sy_range_out_of_bounds.
+        " If issue with invalid substring, then return unformatted line
+        rv_line = iv_line.
+    ENDTRY.
 
   ENDMETHOD.
 
