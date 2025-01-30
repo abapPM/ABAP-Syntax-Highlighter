@@ -26,9 +26,16 @@ WRITE html.
 
 Output:
 
+```abap
+call function 'FM_NAME'. " Commmented
+```
+
 ```html
 <span class="keyword">call</span> <span class="keyword">function</span> <span class="text">'FM_NAME'</span>. <span class="comment">" Commented</span>
 ```
+
+> [!NOTE]
+> It's recommended to process one line at a time instead of passing a long string containing newline separators.
 
 The language is derived from the extension of the filename passed to the factory:
 
@@ -52,9 +59,6 @@ Extension   | Syntax Highlighter
 `.xml `     | XML
 `.yaml `    | YAML (experimental)
 `.yml `     | YAML (experimental)
-
-> [!NOTE]
-> It's recommended to process one line at a time instead of passing a long string containing newline separators.
 
 Options:
 
