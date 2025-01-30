@@ -281,7 +281,10 @@ CLASS zcl_highlighter IMPLEMENTATION.
     result = line.
 
     IF hidden_chars = abap_true.
+      " The order matters :-)
       REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>horizontal_tab IN result WITH '&nbsp;&rarr;&nbsp;'.
+      REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>cr_lf          IN result WITH '&para;'.
+      REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>newline        IN result WITH '&crarr;'.
       REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>cr_lf(1)       IN result WITH '&para;'.
       REPLACE ALL OCCURRENCES OF ` `                                    IN result WITH '&middot;'.
       REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>form_feed IN result
