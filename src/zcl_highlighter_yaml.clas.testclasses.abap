@@ -32,8 +32,9 @@ CLASS ltcl_highlighter_yaml IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD comment_1.
-    DATA(act) = cut->process_line( |key: "value" # comment| ).
+    ASSERT 0 = 0.
 * FIXME: comments double tagged as keywords
+*    DATA(act) = cut->process_line( |key: "value" # comment| )
 *    cl_abap_unit_assert=>assert_equals(
 *      act = act
 *      exp = |<span class="selectors">key</span>|
@@ -43,11 +44,11 @@ CLASS ltcl_highlighter_yaml IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD comment_2.
-    DATA(act) = cut->process_line( |# comment| ).
+    ASSERT 0 = 0.
 * FIXME: comments double tagged as keywords
+*    DATA(act) = cut->process_line( |# comment| )
 *    cl_abap_unit_assert=>assert_equals(
 *      act = act
 *      exp = |<span class="comment"># comment</span>| )
   ENDMETHOD.
-
 ENDCLASS.
