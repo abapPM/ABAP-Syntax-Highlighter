@@ -1,9 +1,9 @@
-CLASS ltcl_abapgit_syntax_json DEFINITION FINAL FOR TESTING
+CLASS ltcl_highlighter_json DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA cut TYPE REF TO zcl_abapgit_syntax_json.
+    DATA cut TYPE REF TO zcl_highlighter_json.
 
     METHODS:
       setup,
@@ -14,7 +14,7 @@ CLASS ltcl_abapgit_syntax_json DEFINITION FINAL FOR TESTING
 ENDCLASS.
 
 
-CLASS ltcl_abapgit_syntax_json IMPLEMENTATION.
+CLASS ltcl_highlighter_json IMPLEMENTATION.
 
   METHOD setup.
 

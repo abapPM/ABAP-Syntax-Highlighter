@@ -27,17 +27,18 @@ CLASS zcl_highlighter_yaml DEFINITION
     CONSTANTS:
       BEGIN OF c_regex,
         " comments #
-        comment TYPE string VALUE '#.*$',
+        comment TYPE string VALUE '#.+',
+        " keywords
+        keyword TYPE string VALUE '[-_a-zA-Z0-9]+',
         " not much here
-        keyword TYPE string VALUE 'true|false|null',
+        values  TYPE string VALUE 'true|false|null',
         " double quoted strings
         text    TYPE string VALUE '"',
         " YAML collections, structures, scalars, tags
-        attr    TYPE string VALUE '- |: |---|...|\[|\]|\{|\}|&|\*|? |\>|\|!',
+        attr    TYPE string VALUE '- |: |---|\.\.\.|\[|\]|\{|\}|&|\*|\? |>|!|\|',
       END OF c_regex.
 
     METHODS constructor.
-
   PROTECTED SECTION.
 
     METHODS order_matches REDEFINITION.
@@ -56,6 +57,12 @@ CLASS zcl_highlighter_yaml IMPLEMENTATION.
 
     " Initialize instances of regular expression
 
+    " Comments
+    add_rule( regex = c_regex-comment
+              token = c_token-comment
+              style = c_css-comment ).
+
+    " Keywords
     add_rule( regex = c_regex-keyword
               token = c_token-keyword
               style = c_css-keyword ).
@@ -66,14 +73,9 @@ CLASS zcl_highlighter_yaml IMPLEMENTATION.
               style = c_css-text ).
 
     " Style for values
-    add_rule( regex = ''
+    add_rule( regex = c_regex-values
               token = c_token-values
               style = c_css-values ).
-
-    " Comments
-    add_rule( regex = c_regex-comment
-              token = c_token-comment
-              style = c_css-comment ).
 
     " YAML collections, structures, scalars, tags
     add_rule( regex = c_regex-attr
