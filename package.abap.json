@@ -1,32 +1,32 @@
 {
-  "name": "xxx",
+  "name": "syntax-highlighter",
   "version": "1.0.0",
-  "description": "XXX",
+  "description": "Syntax Highlighter for ABAP",
   "type": "module",
   "keywords": [
     "abap",
     "apm",
-    "module"
+    "module",
+    "syntax",
+    "highlighter"
   ],
   "homepage": "https://abappm.com",
   "bugs": {
-    "url": "https://github.com/abapPM/ABAP-XXX"
+    "url": "https://github.com/abapPM/ABAP-Syntax-Highlighter"
   },
   "license": "MIT",
   "author": {
     "name": "Marc Bernard",
-    "url": "https://abappm.com",
-    "email": "marc@abappm.com"
+    "url": "https://abappm.com"
   },
   "maintainers": [
     {
       "name": "Marc Bernard",
-      "url": "https://github.com/mbtools",
-      "email": "marc@abappm.com"
+      "url": "https://github.com/mbtools"
     }
   ],
   "repository": {
-    "url": "https://github.com/abapPM/ABAP-XXX"
+    "url": "https://github.com/abapPM/ABAP-Syntax-Highlighter"
   },
   "funding": {
     "type": "github",
