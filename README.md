@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Syntax-Highlighter/src/zcl_Syntax-Highlighter.clas.abap/c_version&label=Version&color=blue)
+![Version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/abapPM/ABAP-Syntax-Highlighter/src/%2523apmg%2523cl_highlighter.clas.abap/c_version&label=Version&color=blue)
 
 [![License](https://img.shields.io/github/license/abapPM/ABAP-Syntax-Highlighter?label=License&color=success)](https://github.com/abapPM/ABAP-Syntax-Highlighter/blob/main/LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?color=success)](https://github.com/abapPM/.github/blob/main/CODE_OF_CONDUCT.md)
@@ -15,7 +15,7 @@ NO WARRANTIES, [MIT License](https://github.com/abapPM/ABAP-Syntax-Highlighter/b
 For example, here's how you highlight keywords and comments in a line of ABAP code:
 
 ```abap
-DATA(highlighter) = zcl_highlighter_factory=>create( 'file.abap' ).
+DATA(highlighter) = /apmg/cl_highlighter_factory=>create( 'file.abap' ).
 
 DATA(code) = `call function 'FM_NAME'. " Commented`.
 
@@ -52,6 +52,7 @@ Extension   | Syntax Highlighter
 `.jsonc`    | JSON  (with end-of-line comments)
 `.markdown` | Markdown
 `.md`       | Markdown
+`.po`       | PO Translations
 `.sass`     | SASS
 `.scss`     | SCSS
 `.text `    | Plain Text
@@ -62,17 +63,17 @@ Extension   | Syntax Highlighter
 
 Options:
 
-You can show invisible characters in the output by settings an option in the factory call. This will highlight the following characters: horizontal tab (x09), form feed (x0C), carriage return (x0D), space (x20), as well as byte-order-marks (BOM) for UTF-8 (xEF BB BF), UTF-16 big-endian (xFE FF), and UTF-16 little-endian (xFF FE).
+You can show invisible characters in the output by setting an option in the factory call. This will highlight the following characters: horizontal tab (x09), form feed (x0C), carriage return (x0D), space (x20), as well as byte-order-marks (BOM) for UTF-8 (xEF BB BF), UTF-16 big-endian (xFE FF), and UTF-16 little-endian (xFF FE).
 
 ```abap
-DATA(highlighter) = zcl_highlighter_factory=>create(
+DATA(highlighter) = /apmg/cl_highlighter_factory=>create(
   filename     = 'file.abap'
   hidden_chars = abap_true ).
 ```
 
 ## Prerequisites
 
-SAP Basis 7.40 or higher
+SAP Basis 7.50 or higher
 
 ## Installation
 
@@ -88,7 +89,7 @@ All contributions are welcome! Read our [Contribution Guidelines](https://github
 
 You can install the developer version of ABAP SYNTAX-HIGHLIGHTER using [abapGit](https://github.com/abapGit/abapGit) by creating a new online repository for `https://github.com/abapPM/ABAP-Syntax-Highlighter`.
 
-Recommended SAP package: `$SYNTAX-HIGHLIGHTER`
+Recommended SAP package: `/APMG/SYNTAX-HIGHLIGHTER`
 
 ## Attibution
 
@@ -102,4 +103,4 @@ Made with ❤ in Canada
 
 Copyright 2025 apm.to Inc. <https://apm.to>
 
-Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Blueksy and [@marcfbe](https://linkedin.com/in/marcfbe) or LinkedIn
+Follow [@marcf.be](https://bsky.app/profile/marcf.be) on Bluesky and [@marcfbe](https://linkedin.com/in/marcfbe) or LinkedIn
