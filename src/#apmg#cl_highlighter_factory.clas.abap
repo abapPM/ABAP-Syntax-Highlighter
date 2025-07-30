@@ -1,8 +1,14 @@
-CLASS zcl_highlighter_factory DEFINITION
+CLASS /apmg/cl_highlighter_factory DEFINITION
   PUBLIC
   ABSTRACT
   CREATE PUBLIC.
 
+************************************************************************
+* Syntax Highlighter
+*
+* Copyright (c) 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     CLASS-METHODS create
@@ -10,7 +16,7 @@ CLASS zcl_highlighter_factory DEFINITION
         !filename     TYPE string
         !hidden_chars TYPE abap_bool DEFAULT abap_false
       RETURNING
-        VALUE(result) TYPE REF TO zcl_highlighter.
+        VALUE(result) TYPE REF TO /apmg/cl_highlighter.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -18,28 +24,28 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter_factory IMPLEMENTATION.
+CLASS /apmg/cl_highlighter_factory IMPLEMENTATION.
 
 
   METHOD create.
 
     " Create instance of highlighter dynamically dependent on syntax type
     IF filename CP '*.abap'.
-      result = NEW zcl_highlighter_abap( ).
+      result = NEW /apmg/cl_highlighter_abap( ).
     ELSEIF filename CP '*.xml' OR filename CP '*.html'.
-      result = NEW zcl_highlighter_xml( ).
+      result = NEW /apmg/cl_highlighter_xml( ).
     ELSEIF filename CP '*.css' OR filename CP '*.scss' OR filename CP '*.sass'.
-      result = NEW zcl_highlighter_css( ).
+      result = NEW /apmg/cl_highlighter_css( ).
     ELSEIF filename CP '*.js'.
-      result = NEW zcl_highlighter_js( ).
+      result = NEW /apmg/cl_highlighter_js( ).
     ELSEIF filename CP '*.json' OR filename CP '*.jsonc' OR filename CP '*.json5'.
-      result = NEW zcl_highlighter_json( ).
+      result = NEW /apmg/cl_highlighter_json( ).
     ELSEIF filename CP '*.txt' OR filename CP '*.ini'  OR filename CP '*.text'.
-      result = NEW zcl_highlighter_txt( ).
+      result = NEW /apmg/cl_highlighter_txt( ).
     ELSEIF filename CP '*.md' OR filename CP '*.markdown'.
-      result = NEW zcl_highlighter_md( ).
+      result = NEW /apmg/cl_highlighter_md( ).
     ELSEIF filename CP '*.diff'.
-      result = NEW zcl_highlighter_diff( ).
+      result = NEW /apmg/cl_highlighter_diff( ).
     ELSE.
       CLEAR result.
     ENDIF.

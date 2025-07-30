@@ -1,11 +1,17 @@
-CLASS zcl_highlighter_yaml DEFINITION
+CLASS /apmg/cl_highlighter_yaml DEFINITION
   PUBLIC
-  INHERITING FROM zcl_highlighter
+  INHERITING FROM /apmg/cl_highlighter
   CREATE PUBLIC.
 
+************************************************************************
+* Syntax Highlighter
+*
+* Copyright (c) 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
 * Basic YAML formatting
 * https://yaml.org/
-
+************************************************************************
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -15,16 +21,14 @@ CLASS zcl_highlighter_yaml DEFINITION
         values  TYPE string VALUE 'properties',
         comment TYPE string VALUE 'comment',
         attr    TYPE string VALUE 'attr',
-      END OF c_css.
-    CONSTANTS:
+      END OF c_css,
       BEGIN OF c_token,
         keyword TYPE c VALUE 'K',
         text    TYPE c VALUE 'T',
         values  TYPE c VALUE 'V',
         comment TYPE c VALUE 'C',
         attr    TYPE c VALUE 'A',
-      END OF c_token.
-    CONSTANTS:
+      END OF c_token,
       BEGIN OF c_regex,
         " comments #
         comment TYPE string VALUE '#.+',
@@ -39,6 +43,7 @@ CLASS zcl_highlighter_yaml DEFINITION
       END OF c_regex.
 
     METHODS constructor.
+
   PROTECTED SECTION.
 
     METHODS order_matches REDEFINITION.
@@ -48,7 +53,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter_yaml IMPLEMENTATION.
+CLASS /apmg/cl_highlighter_yaml IMPLEMENTATION.
 
 
   METHOD constructor.

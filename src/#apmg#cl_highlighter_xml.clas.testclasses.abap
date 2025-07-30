@@ -1,7 +1,7 @@
 CLASS ltcl_highlighter_xml DEFINITION FINAL FOR TESTING DURATION SHORT RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA cut TYPE REF TO zcl_highlighter_xml.
+    DATA cut TYPE REF TO /apmg/cl_highlighter_xml.
 
     METHODS:
       setup,
@@ -130,7 +130,7 @@ ENDCLASS.
 
 CLASS ltcl_syntax_cases DEFINITION DEFERRED.
 
-CLASS zcl_highlighter_xml DEFINITION LOCAL FRIENDS ltcl_syntax_cases.
+CLASS /apmg/cl_highlighter_xml DEFINITION LOCAL FRIENDS ltcl_syntax_cases.
 
 *----------------------------------------------------------------------*
 *       CLASS ltcl_syntax_cases definition
@@ -140,9 +140,9 @@ CLASS ltcl_syntax_cases DEFINITION FINAL FOR TESTING RISK LEVEL HARMLESS DURATIO
   PRIVATE SECTION.
 
     DATA:
-      after_parse  TYPE zcl_highlighter_xml=>ty_match_tt,
-      after_order  TYPE zcl_highlighter_xml=>ty_match_tt,
-      after_extend TYPE zcl_highlighter_xml=>ty_match_tt.
+      after_parse  TYPE /apmg/cl_highlighter_xml=>ty_match_tt,
+      after_order  TYPE /apmg/cl_highlighter_xml=>ty_match_tt,
+      after_extend TYPE /apmg/cl_highlighter_xml=>ty_match_tt.
 
     METHODS:
       do_test IMPORTING line TYPE string,
@@ -175,7 +175,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
 
   METHOD do_test.
 
-    DATA(syntax_highlighter) = NEW zcl_highlighter_xml( ).
+    DATA(syntax_highlighter) = NEW /apmg/cl_highlighter_xml( ).
     DATA(matches_act) = syntax_highlighter->parse_line( line ).
 
     SORT matches_act BY offset.
@@ -215,7 +215,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_parse.
-    DATA(match) = VALUE zcl_highlighter_xml=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_xml=>ty_match(
       token  = token
       offset = offset
       length = length ).
@@ -223,7 +223,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_order.
-    DATA(match) = VALUE zcl_highlighter_xml=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_xml=>ty_match(
       token    = token
       offset   = offset
       length   = length
@@ -232,7 +232,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_extend.
-    DATA(match) = VALUE zcl_highlighter_xml=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_xml=>ty_match(
       token    = token
       offset   = offset
       length   = length
