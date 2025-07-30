@@ -17,7 +17,7 @@ For example, here's how you highlight keywords and comments in a line of ABAP co
 ```abap
 DATA(highlighter) = /apmg/cl_highlighter_factory=>create( 'file.abap' ).
 
-DATA(code) = `call function 'FM_NAME'. " Commented`.
+DATA(code) = `call function 'FM_NAME'. " Comment`.
 
 DATA(html) = highlighter->process_line( code ).
 
@@ -27,11 +27,11 @@ WRITE html.
 Output:
 
 ```abap
-call function 'FM_NAME'. " Commmented
+call function 'FM_NAME'. " Commment
 ```
 
 ```html
-<span class="keyword">call</span> <span class="keyword">function</span> <span class="text">'FM_NAME'</span>. <span class="comment">" Commented</span>
+<span class="keyword">call</span> <span class="keyword">function</span> <span class="text">'FM_NAME'</span>. <span class="comment">" Comment</span>
 ```
 
 > [!NOTE]
@@ -93,7 +93,7 @@ Recommended SAP package: `/APMG/SYNTAX-HIGHLIGHTER`
 
 ## Attibution
 
-This project includes the code for the following open-source projects. Please support them if you can!
+This project includes the code from the following open-source projects. Please support them if you can!
 
 - [abapGit](https://github.com/abapGit/abapGit), abapGit Community, [MIT](https://github.com/abapGit/abapGit/blob/main/LICENSE)
 
