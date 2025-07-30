@@ -1,8 +1,14 @@
-CLASS zcl_highlighter_md DEFINITION
+CLASS /apmg/cl_highlighter_xml DEFINITION
   PUBLIC
-  INHERITING FROM zcl_highlighter
+  INHERITING FROM /apmg/cl_highlighter
   CREATE PUBLIC.
 
+************************************************************************
+* Syntax Highlighter
+*
+* Copyright (c) 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -10,33 +16,20 @@ CLASS zcl_highlighter_md DEFINITION
         xml_tag  TYPE string VALUE 'xml_tag',
         attr     TYPE string VALUE 'attr',
         attr_val TYPE string VALUE 'attr_val',
-        heading  TYPE string VALUE 'heading',
-        link     TYPE string VALUE 'link',
-        url      TYPE string VALUE 'url',
-        strong   TYPE string VALUE 'strong',
-        emphasis TYPE string VALUE 'emphasis',
         comment  TYPE string VALUE 'comment',
       END OF c_css,
       BEGIN OF c_token,
         xml_tag  TYPE c VALUE 'X',
         attr     TYPE c VALUE 'A',
         attr_val TYPE c VALUE 'V',
-        heading  TYPE c VALUE 'H',
-        link     TYPE c VALUE 'L',
-        url      TYPE c VALUE 'U',
-        strong   TYPE c VALUE 'S',
-        emphasis TYPE c VALUE 'E',
         comment  TYPE c VALUE 'C',
       END OF c_token,
       BEGIN OF c_regex,
+        " For XML tags, we will use a submatch
+        " main pattern includes quoted strings so we can ignore < and > in attr values
         xml_tag  TYPE string VALUE '(?:"[^"]*")|(?:''[^'']*'')|(?:`[^`]*`)|([<>])',
         attr     TYPE string VALUE '(?:^|\s)[-a-z:_0-9]+\s*(?==\s*["|''|`])',
         attr_val TYPE string VALUE '("[^"]*")|(''[^'']*'')|(`[^`]*`)',
-        heading  TYPE string VALUE '^#\s*(.*)',
-        link     TYPE string VALUE '\[[^]]+\]',
-        url      TYPE string VALUE `http[s]*://[^>"'\)\s]+`,
-        strong   TYPE string VALUE '\*\*[^*]+\*\*',
-        emphasis TYPE string VALUE '__[^_]+__',
         " comments <!-- ... -->
         comment  TYPE string VALUE '[\<]!--.*--[\>]|[\<]!--|--[\>]',
       END OF c_regex.
@@ -54,15 +47,17 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter_md IMPLEMENTATION.
+CLASS /apmg/cl_highlighter_xml IMPLEMENTATION.
 
 
   METHOD constructor.
 
     super->constructor( ).
 
-    " Initialize instances of regular expressions
+    " Reset indicator for multi-line comments
+    CLEAR comment.
 
+    " Initialize instances of regular expressions
     add_rule( regex    = c_regex-xml_tag
               token    = c_token-xml_tag
               style    = c_css-xml_tag
@@ -76,26 +71,6 @@ CLASS zcl_highlighter_md IMPLEMENTATION.
               token = c_token-attr_val
               style = c_css-attr_val ).
 
-    add_rule( regex = c_regex-heading
-              token = c_token-heading
-              style = c_css-heading ).
-
-    add_rule( regex = c_regex-link
-              token = c_token-link
-              style = c_css-link ).
-
-    add_rule( regex = c_regex-url
-              token = c_token-url
-              style = c_css-url ).
-
-    " TODO: Rules for strong and emphasis conflict with others
-    " add_rule( regex = c_regex-strong
-    "           token = c_token-strong
-    "           style = c_css-strong )
-    " add_rule( regex = c_regex-emphasis
-    "           token = c_token-emphasis
-    "           style = c_css-emphasis )
-
     add_rule( regex = c_regex-comment
               token = c_token-comment
               style = c_css-comment ).
@@ -107,7 +82,8 @@ CLASS zcl_highlighter_md IMPLEMENTATION.
 
     FIELD-SYMBOLS <prev_match> TYPE ty_match.
 
-    SORT matches BY offset.
+    " Longest matches
+    SORT matches BY offset length DESCENDING.
 
     DATA(line_len)   = strlen( line ).
     DATA(prev_token) = ''.
@@ -147,13 +123,7 @@ CLASS zcl_highlighter_md IMPLEMENTATION.
           ELSEIF <match>-text_tag = '>' AND prev_token <> c_token-xml_tag.
             state = 'C'.
             IF <prev_match> IS ASSIGNED.
-              DATA(new_len) = <match>-offset - <prev_match>-offset - <prev_match>-length + <match>-length.
-              IF new_len < 0.
-                " Something went wrong. Ignore the match
-                DELETE matches INDEX index.
-                CONTINUE.
-              ENDIF.
-              <match>-length = new_len.
+              <match>-length = <match>-offset - <prev_match>-offset - <prev_match>-length + <match>-length.
               <match>-offset = <prev_match>-offset + <prev_match>-length.
             ENDIF.
           ELSE.
@@ -192,7 +162,6 @@ CLASS zcl_highlighter_md IMPLEMENTATION.
 
       prev_token = <match>-token.
       ASSIGN <match> TO <prev_match>.
-      CHECK sy-subrc >= 0. "abaplint false positive
     ENDLOOP.
 
     "if the last XML tag is not closed, extend it to the end of the tag

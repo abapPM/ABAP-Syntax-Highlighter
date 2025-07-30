@@ -1,7 +1,7 @@
 CLASS ltcl_highlighter_abap DEFINITION FINAL FOR TESTING DURATION SHORT RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA cut TYPE REF TO zcl_highlighter_abap.
+    DATA cut TYPE REF TO /apmg/cl_highlighter_abap.
 
     METHODS:
       setup,
@@ -32,7 +32,7 @@ ENDCLASS.
 
 CLASS ltcl_syntax_basic_logic DEFINITION DEFERRED.
 
-CLASS zcl_highlighter_abap DEFINITION LOCAL FRIENDS ltcl_syntax_basic_logic.
+CLASS /apmg/cl_highlighter_abap DEFINITION LOCAL FRIENDS ltcl_syntax_basic_logic.
 
 *----------------------------------------------------------------------*
 *       CLASS ltcl_syntax_basic_logic DEFINITION
@@ -43,7 +43,7 @@ CLASS ltcl_syntax_basic_logic DEFINITION FINAL FOR TESTING RISK LEVEL HARMLESS D
 
   PRIVATE SECTION.
 
-    DATA syntax_highlighter TYPE REF TO zcl_highlighter_abap.
+    DATA syntax_highlighter TYPE REF TO /apmg/cl_highlighter_abap.
 
     METHODS:
       setup,
@@ -87,7 +87,7 @@ CLASS ltcl_syntax_basic_logic IMPLEMENTATION.
     " Call the method and compare results
     DATA(line_act) = syntax_highlighter->apply_style(
       line  = 'CALL FUNCTION'
-      class = zcl_highlighter_abap=>c_css-keyword ).
+      class = /apmg/cl_highlighter_abap=>c_css-keyword ).
 
     cl_abap_unit_assert=>assert_equals(
       act = line_act
@@ -120,7 +120,7 @@ ENDCLASS.
 
 CLASS ltcl_syntax_cases DEFINITION DEFERRED.
 
-CLASS zcl_highlighter_abap DEFINITION LOCAL FRIENDS ltcl_syntax_cases.
+CLASS /apmg/cl_highlighter_abap DEFINITION LOCAL FRIENDS ltcl_syntax_cases.
 
 *----------------------------------------------------------------------*
 *       CLASS ltcl_syntax_cases definition
@@ -130,9 +130,9 @@ CLASS ltcl_syntax_cases DEFINITION FINAL FOR TESTING RISK LEVEL HARMLESS DURATIO
   PRIVATE SECTION.
 
     DATA:
-      after_parse  TYPE zcl_highlighter_abap=>ty_match_tt,
-      after_order  TYPE zcl_highlighter_abap=>ty_match_tt,
-      after_extend TYPE zcl_highlighter_abap=>ty_match_tt.
+      after_parse  TYPE /apmg/cl_highlighter_abap=>ty_match_tt,
+      after_order  TYPE /apmg/cl_highlighter_abap=>ty_match_tt,
+      after_extend TYPE /apmg/cl_highlighter_abap=>ty_match_tt.
 
     METHODS:
       do_test IMPORTING line TYPE string,
@@ -164,7 +164,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
 
   METHOD do_test.
 
-    DATA(syntax_highlighter) = NEW zcl_highlighter_abap( ).
+    DATA(syntax_highlighter) = NEW /apmg/cl_highlighter_abap( ).
 
     DATA(matches_act) = syntax_highlighter->parse_line( line ).
 
@@ -205,7 +205,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_parse.
-    DATA(match) = VALUE zcl_highlighter_abap=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_abap=>ty_match(
       token  = token
       offset = offset
       length = length ).
@@ -213,7 +213,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_order.
-    DATA(match) = VALUE zcl_highlighter_abap=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_abap=>ty_match(
       token    = token
       offset   = offset
       length   = length
@@ -222,7 +222,7 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD generate_extend.
-    DATA(match) = VALUE zcl_highlighter_abap=>ty_match(
+    DATA(match) = VALUE /apmg/cl_highlighter_abap=>ty_match(
       token    = token
       offset   = offset
       length   = length

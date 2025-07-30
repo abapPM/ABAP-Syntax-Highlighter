@@ -1,4 +1,4 @@
-CLASS zcl_highlighter DEFINITION
+CLASS /apmg/cl_highlighter DEFINITION
   PUBLIC
   ABSTRACT
   CREATE PUBLIC.
@@ -101,7 +101,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter IMPLEMENTATION.
+CLASS /apmg/cl_highlighter IMPLEMENTATION.
 
 
   METHOD add_rule.
@@ -293,7 +293,7 @@ CLASS zcl_highlighter IMPLEMENTATION.
       IF strlen( result ) BETWEEN 1 AND 2.
         TRY.
             DATA(bom) = CONV ty_bom( lcl_out=>convert( result ) ).
-          CATCH zcx_error ##NO_HANDLER.
+          CATCH /apmg/cx_error ##NO_HANDLER.
         ENDTRY.
         IF bom(2) = cl_abap_char_utilities=>byte_order_mark_big.
           result = '<span class="red">&squf;</span>'. " UTF-16 big-endian (FE FF)

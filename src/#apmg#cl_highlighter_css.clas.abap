@@ -1,8 +1,14 @@
-CLASS zcl_highlighter_css DEFINITION
+CLASS /apmg/cl_highlighter_css DEFINITION
   PUBLIC
-  INHERITING FROM zcl_highlighter
+  INHERITING FROM /apmg/cl_highlighter
   CREATE PUBLIC.
 
+************************************************************************
+* Syntax Highlighter
+*
+* Copyright (c) 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -97,7 +103,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter_css IMPLEMENTATION.
+CLASS /apmg/cl_highlighter_css IMPLEMENTATION.
 
 
   METHOD class_constructor.

@@ -1,8 +1,14 @@
-CLASS zcl_highlighter_diff DEFINITION
+CLASS /apmg/cl_highlighter_diff DEFINITION
   PUBLIC
-  INHERITING FROM zcl_highlighter
+  INHERITING FROM /apmg/cl_highlighter
   CREATE PUBLIC.
 
+************************************************************************
+* Syntax Highlighter
+*
+* Copyright (c) 2014 abapGit Contributors
+* SPDX-License-Identifier: MIT
+************************************************************************
   PUBLIC SECTION.
 
     CONSTANTS:
@@ -33,7 +39,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_highlighter_diff IMPLEMENTATION.
+CLASS /apmg/cl_highlighter_diff IMPLEMENTATION.
 
 
   METHOD constructor.

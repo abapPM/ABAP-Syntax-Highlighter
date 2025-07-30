@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_HIGHLIGHTER</CLSNAME>
+    <CLSNAME>/APMG/CL_HIGHLIGHTER_DIFF</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Syntax Highlighter</DESCRIPT>
+    <DESCRIPT>Syntax Highlighter - Diff</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

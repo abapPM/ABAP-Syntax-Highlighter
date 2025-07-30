@@ -8,7 +8,7 @@ CLASS lcl_out DEFINITION.
       RETURNING
         VALUE(result) TYPE xstring
       RAISING
-        zcx_error.
+        /apmg/cx_error.
 
   PRIVATE SECTION.
 
@@ -54,7 +54,7 @@ CLASS lcl_out IMPLEMENTATION.
             cx_sy_codepage_converter_init
             cx_sy_conversion_codepage
             cx_parameter_invalid_type INTO DATA(error).
-        RAISE EXCEPTION TYPE zcx_error_prev EXPORTING previous = error.
+        RAISE EXCEPTION TYPE /apmg/cx_error_prev EXPORTING previous = error.
     ENDTRY.
   ENDMETHOD.
 

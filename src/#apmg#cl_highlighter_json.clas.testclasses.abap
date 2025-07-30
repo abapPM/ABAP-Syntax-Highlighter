@@ -3,7 +3,7 @@ CLASS ltcl_highlighter_json DEFINITION FINAL FOR TESTING
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA cut TYPE REF TO zcl_highlighter_json.
+    DATA cut TYPE REF TO /apmg/cl_highlighter_json.
 
     METHODS:
       setup,
