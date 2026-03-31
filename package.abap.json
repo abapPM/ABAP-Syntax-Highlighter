@@ -6,9 +6,9 @@
   "keywords": [
     "abap",
     "apm",
+    "highlighter",
     "module",
-    "syntax",
-    "highlighter"
+    "syntax"
   ],
   "homepage": "https://abappm.com",
   "bugs": {
