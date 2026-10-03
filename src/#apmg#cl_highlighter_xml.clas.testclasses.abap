@@ -775,3 +775,122 @@ CLASS ltcl_syntax_cases IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltcl_xml_regressions DEFINITION FINAL FOR TESTING DURATION SHORT RISK LEVEL HARMLESS.
+  PRIVATE SECTION.
+    DATA cut TYPE REF TO /apmg/cl_highlighter_xml.
+    METHODS:
+      setup,
+      separate_comments FOR TESTING,
+      quoted_comment_markers FOR TESTING,
+      comment_first_end FOR TESTING,
+      comment_nested_start FOR TESTING,
+      comment_tag_attribute FOR TESTING,
+      instance_isolation FOR TESTING,
+      dotted_attributes FOR TESTING,
+      text_after_comment FOR TESTING,
+      nested_quotes FOR TESTING,
+      quotes_in_comments FOR TESTING.
+ENDCLASS.
+
+
+CLASS ltcl_xml_regressions IMPLEMENTATION.
+  METHOD setup.
+    cut = NEW #( ).
+  ENDMETHOD.
+
+  METHOD separate_comments.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<!-- first --><tag/><!-- second -->' )
+      exp = |<span class="comment">&lt;!-- first --&gt;</span>|
+         && |<span class="xml_tag">&lt;tag/&gt;</span>|
+         && |<span class="comment">&lt;!-- second --&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD quoted_comment_markers.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<tag value="-->"/>' )
+      exp = |<span class="xml_tag">&lt;tag</span><span class="attr"> value</span>=|
+         && |<span class="attr_val">"--&gt;"</span><span class="xml_tag">/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD comment_first_end.
+    cut->process_line( '<!-- open' ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<tag --> <next/>' )
+      exp = |<span class="comment">&lt;tag --&gt;</span> <span class="xml_tag">&lt;next/&gt;</span>| ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<last/>' )
+      exp = |<span class="xml_tag">&lt;last/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD comment_nested_start.
+    cut->process_line( '<!-- open' ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( 'prefix <!-- nested --> <next/>' )
+      exp = |<span class="comment">prefix &lt;!-- nested --&gt;</span> |
+         && |<span class="xml_tag">&lt;next/&gt;</span>| ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<last/>' )
+      exp = |<span class="xml_tag">&lt;last/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD comment_tag_attribute.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<!--a--><tag value="v"/>' )
+      exp = |<span class="comment">&lt;!--a--&gt;</span>|
+         && |<span class="xml_tag">&lt;tag</span>|
+         && |<span class="attr"> value</span>=|
+         && |<span class="attr_val">"v"</span>|
+         && |<span class="xml_tag">/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD instance_isolation.
+    cut->process_line( '<!-- open' ).
+    DATA(other) = NEW /apmg/cl_highlighter_xml( ).
+    cl_abap_unit_assert=>assert_equals(
+      act = other->process_line( '<tag/>' )
+      exp = |<span class="xml_tag">&lt;tag/&gt;</span>| ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( 'body' )
+      exp = |<span class="comment">body</span>| ).
+    cut->process_line( '-->' ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<tag/>' )
+      exp = |<span class="xml_tag">&lt;tag/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD dotted_attributes.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<tag xml.name="v"/>' )
+      exp = |<span class="xml_tag">&lt;tag</span><span class="attr"> xml.name</span>=|
+         && |<span class="attr_val">"v"</span><span class="xml_tag">/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD text_after_comment.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<!-- note --> "text"' )
+      exp = |<span class="comment">&lt;!-- note --&gt;</span> "text"| ).
+  ENDMETHOD.
+
+  METHOD nested_quotes.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( `<tag value="'quoted'"/>` )
+      exp = |<span class="xml_tag">&lt;tag</span><span class="attr"> value</span>=|
+         && |<span class="attr_val">"'quoted'"</span><span class="xml_tag">/&gt;</span>| ).
+  ENDMETHOD.
+
+  METHOD quotes_in_comments.
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '<!-- " --> <tag value="v"/>' )
+      exp = |<span class="comment">&lt;!-- " --&gt;</span> |
+         && |<span class="xml_tag">&lt;tag</span><span class="attr"> value</span>=|
+         && |<span class="attr_val">"v"</span><span class="xml_tag">/&gt;</span>| ).
+    cut->process_line( '<!-- open' ).
+    cl_abap_unit_assert=>assert_equals(
+      act = cut->process_line( '" --> <tag value="v"/>' )
+      exp = |<span class="comment">" --&gt;</span> |
+         && |<span class="xml_tag">&lt;tag</span><span class="attr"> value</span>=|
+         && |<span class="attr_val">"v"</span><span class="xml_tag">/&gt;</span>| ).
+  ENDMETHOD.
+ENDCLASS.
