@@ -158,7 +158,7 @@ CLASS /apmg/cl_highlighter_xml IMPLEMENTATION.
               comment = abap_false.
             WHEN OTHERS.
               DATA(cmmt_end) = <match>-offset + <match>-length.
-              DELETE matches WHERE offset > <match>-offset AND offset <= cmmt_end.
+              DELETE matches WHERE offset > <match>-offset AND offset < cmmt_end.
               DELETE matches WHERE offset = <match>-offset AND token = c_token-xml_tag.
           ENDCASE.
 
