@@ -60,9 +60,13 @@ CLASS /apmg/cl_highlighter_css DEFINITION
         keyword   TYPE string VALUE '--[a-z][a-z0-9\-]*\b|@-?[a-z][a-z0-9\-]*\b|\b[a-z][a-z0-9\-]*\b',
         " selectors begin with :
         selectors TYPE string VALUE '::?[a-z][a-z0-9\-]*\b',
-        " units
+        " CSS numbers followed by a unit or %, excluding the preceding identifier boundary
         units     TYPE string
-        VALUE '\b[0-9\. ]+(ch|cm|em|ex|in|mm|pc|pt|px|rem|vh|vmax|vmin|vw)\b|\b[0-9\. ]+%',
+        VALUE '(^|[^a-z0-9_.-])([+-]?([0-9]+(\.[0-9]+)?|\.[0-9]+)(e[+-]?[0-9]+)?((' &
+        'cm|mm|q|in|pt|pc|px|' &
+        'em|rem|ex|rex|cap|rcap|ch|rch|ic|ric|lh|rlh|' &
+        '[sld]?v(w|h|i|b|min|max)|cqw|cqh|cqi|cqb|cqmin|cqmax|' &
+        'deg|grad|rad|turn|s|ms|hz|khz|dpi|dpcm|dppx|x|fr)\b|%))',
       END OF c_regex.
 
     CLASS-METHODS class_constructor.
@@ -137,9 +141,10 @@ CLASS /apmg/cl_highlighter_css IMPLEMENTATION.
               token = c_token-selectors
               style = c_css-selectors ).
 
-    add_rule( regex = c_regex-units
-              token = c_token-units
-              style = c_css-units ).
+    add_rule( regex    = c_regex-units
+              token    = c_token-units
+              style    = c_css-units
+              submatch = 2 ).
 
     " Styles for keywords
     add_rule( regex = ''
@@ -177,7 +182,7 @@ CLASS /apmg/cl_highlighter_css IMPLEMENTATION.
 
     CLEAR keywords.
 
-    " Keywords shared by categories keep the first inserted token (properties take precedence).
+    " Shared keywords keep the first inserted token unless followed directly by ( (function call).
     " 1) CSS Properties
     DATA(keyword_list) =
     'align-content|align-items|align-self|animation|animation-delay|animation-direction|animation-duration|' &&
@@ -424,8 +429,9 @@ CLASS /apmg/cl_highlighter_css IMPLEMENTATION.
     SORT matches BY offset length DESCENDING.
 
     DATA(line_len)   = strlen( line ).
-    DATA(prev_token) = ''.
-    DATA(prev_end)   = ''.
+    DATA(next)       = 0.
+    DATA(prev_token) = ``.
+    DATA(prev_end)   = 0.
 
     " Check if this is part of multi-line comment and mark it accordingly
     IF comment = abap_true.
@@ -463,6 +469,12 @@ CLASS /apmg/cl_highlighter_css IMPLEMENTATION.
           READ TABLE keywords ASSIGNING FIELD-SYMBOL(<keyword>) WITH TABLE KEY keyword = match.
           IF sy-subrc = 0.
             <match>-token = <keyword>-token.
+          ENDIF.
+
+          " A keyword directly followed by ( is a function call; keep @ rules as at-rules
+          next = <match>-offset + <match>-length.
+          IF next < line_len AND match(1) <> '@' AND line+next(1) = '('.
+            <match>-token = c_token-functions.
           ENDIF.
 
         WHEN c_token-comment.
