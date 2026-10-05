@@ -129,14 +129,11 @@ CLASS ltcl_highlighter_css IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD unit_categories.
-    DATA unit TYPE string.
-    DATA units TYPE string_table.
-
-    unit = 'cm|mm|Q|in|pt|pc|px|em|rem|ex|rex|cap|rcap|ch|rch|ic|ric|lh|rlh|'
-      && 'vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|'
-      && 'lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|'
-      && 'cqw|cqh|cqi|cqb|cqmin|cqmax|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx|x|fr|%'.
-    SPLIT unit AT '|' INTO TABLE units.
+    DATA(unit) = `cm|mm|Q|in|pt|pc|px|em|rem|ex|rex|cap|rcap|ch|rch|ic|ric|lh|rlh|`
+      && `vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|`
+      && `lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|`
+      && `cqw|cqh|cqi|cqb|cqmin|cqmax|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx|x|fr|%`.
+    SPLIT unit AT '|' INTO TABLE DATA(units).
     LOOP AT units INTO unit.
       cl_abap_unit_assert=>assert_equals(
         act = cut->process_line( |1{ unit }| )
